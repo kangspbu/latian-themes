@@ -1,65 +1,81 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useTheme } from "./_context/useTheme";
 
 export default function Home() {
+  const { theme, setTheme } = useTheme();
+
+  const handleToggle = () => {
+    setTheme(theme == "light-theme" ? "dark-theme" : "light-theme");
+  };
+
+  const [mounted, setMounted] = useState(false);
+
+  // useEffect only runs on the client, so now we can safely show the UI
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="flex h-screen bg-background items-center  py-40 flex-col gap-20">
+      <div className="font-black text-4xl text-foreground">Theme Test</div>
+      <div className="text-foreground font-black text-3xl">
+        Current Theme: {theme}
+      </div>
+
+      {/* <div className=" flex gap-4">
+        {THEMES.map((theme) => (
+          <button
+            key={theme}
+            className=" uppercase font-bold rounded-3xl p-4 bg-foreground text-background"
+            onClick={() => setTheme(theme)}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            {theme}
+          </button>
+        ))}
+      </div> */}
+
+      <div className="flex border rounded-3xl p-4">
+        <label className="inline-flex items-center cursor-pointer">
+          <span className="select-none text-sm font-medium text-heading text-foreground">
+            Light Theme
+          </span>
+          <input
+            type="checkbox"
+            value={theme}
+            className="sr-only peer"
+            onChange={handleToggle}
+            checked={theme === "dark-theme"}
+          />
+          <div className="relative mx-3 w-9 h-5 bg-foreground peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brand-soft dark:peer-focus:ring-brand-soft rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-background after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand"></div>
+          <span className="select-none text-sm font-medium text-heading text-foreground">
+            Dark Theme
+          </span>
+        </label>
+      </div>
+      <div className="flex gap-20">
+        <div className="bg-primary w-50 h-50 justify-center flex items-center font-bold text-lg text-background ">
+          <div className="bg-background text-foreground rounded-2xl p-3">
+            Primary
+          </div>
         </div>
-      </main>
+        <div className="bg-secondary w-50 h-50 justify-center flex items-center font-bold text-lg text-background">
+          <div className="bg-background text-foreground rounded-2xl p-3">
+            Secondary
+          </div>
+        </div>
+
+        <div className="bg-accent w-50 h-50 justify-center flex items-center font-bold text-lg text-background">
+          <div className="bg-background text-foreground rounded-2xl p-3">
+            Accent
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
