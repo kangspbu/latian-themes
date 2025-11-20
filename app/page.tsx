@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useTheme } from "./_context/useTheme";
 
 export default function Home() {
@@ -9,17 +8,6 @@ export default function Home() {
   const handleToggle = () => {
     setTheme(theme == "light-theme" ? "dark-theme" : "light-theme");
   };
-
-  const [mounted, setMounted] = useState(false);
-
-  // useEffect only runs on the client, so now we can safely show the UI
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
 
   return (
     <div className="flex h-screen bg-background items-center  py-40 flex-col gap-20">
