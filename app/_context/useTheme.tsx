@@ -26,19 +26,11 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 //isis provider
 const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<ThemeType>(() => {
-    if (typeof window === "undefined") return "light-theme";
-
     const savedTheme = localStorage.getItem("theme") as ThemeType | null;
     return savedTheme && THEMES.includes(savedTheme)
       ? savedTheme
       : "light-theme";
   });
-  const [mounted, setMounted] = useState(false);
-
-  // useEffect only runs on the client, so now we can safely show the UI
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     localStorage?.setItem("theme", theme);
@@ -49,10 +41,6 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
     body.classList.remove(...THEMES);
     body.classList.add(theme);
   }, [theme]);
-
-  if (!mounted) {
-    return null;
-  }
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
