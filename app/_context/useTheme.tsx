@@ -12,7 +12,7 @@ import {
 //DONE: create dark theme toggle
 //TODO3: persist the themes choice in localStorage
 
-const THEMES = ["light-theme", "dark-theme", "bluez-theme"] as const;
+const THEMES = ["default", "dark-theme", "green-theme"] as const;
 
 type ThemeType = (typeof THEMES)[number];
 
@@ -26,16 +26,13 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 //isis provider
 const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<ThemeType>(() => {
-    if (typeof window === "undefined") return "light-theme";
+    if (typeof window === "undefined") return "default";
 
     const savedTheme = localStorage.getItem("theme") as ThemeType | null;
-    return savedTheme && THEMES.includes(savedTheme)
-      ? savedTheme
-      : "light-theme";
+    return savedTheme && THEMES.includes(savedTheme) ? savedTheme : "default";
   });
   const [mounted, setMounted] = useState(false);
 
-  // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -47,7 +44,10 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const body = document.body;
     body.classList.remove(...THEMES);
-    body.classList.add(theme);
+
+    if (theme !== "default") {
+      body.classList.add(theme);
+    }
   }, [theme]);
 
   if (!mounted) return null;
